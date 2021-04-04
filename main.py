@@ -60,7 +60,7 @@ async def kick(ctx, user: discord.Member):
 
 @bot.command()
 async def meme(message):
-    await message.channel.send(file=discord.File("D:\Python\DiscordBot\img\\"+random.choice(os.listdir("D:\Python\DiscordBot\img"))))
+    await message.channel.send(file=discord.File("img\\"+random.choice(os.listdir("img"))))
 
 
 bot.run(TOKEN)
