@@ -42,19 +42,25 @@ async def hello(ctx):
 @bot.event
 async def on_message_delete(message):
     channel = bot.get_channel(827903072667041802)
-    await channel.send("Deleted message: "+message.content+"\nAuthor: "+str(message.author))
-    #добавить время удаленного сообщения
+    await channel.send("Deleted message: " + message.content + "\nAuthor: " + str(message.author))
+    # добавить время удаленного сообщения
 
 
 @bot.event
 async def on_message(message):
-    if message.content == 'vitali4': #сделать через список
+    if message.content == 'vitali4':  # сделать через список
         await message.delete()
     await bot.process_commands(message)
+
 
 @bot.command()
 async def kick(ctx, user: discord.Member):
     await ctx.guild.kick(user)
+
+
+@bot.command()
+async def meme(message):
+    await message.channel.send(file=discord.File("D:\Python\DiscordBot\img\\"+random.choice(os.listdir("D:\Python\DiscordBot\img"))))
 
 
 bot.run(TOKEN)
