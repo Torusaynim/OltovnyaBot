@@ -42,7 +42,15 @@ async def hello(ctx):
 @bot.event
 async def on_message_delete(message):
     channel = bot.get_channel(827903072667041802)
-    await channel.send("Deleted message: " + message.content + "\nAuthor: " + str(message.author))
+    embed = discord.Embed(description='', colour=0xD5A6BD)
+    attachments = message.attachments
+    if message.content:
+        embed.add_field(name="Deleted message: ", value=message.content, inline=False)
+    if attachments:
+        embed.set_image(url=attachments[0].url)
+
+    embed.add_field(name="Author: ", value=str(message.author), inline=False)
+    await channel.send(embed=embed)
     # добавить время удаленного сообщения (а еще кто удалил)
 
 
@@ -60,7 +68,7 @@ async def kick(ctx, user: discord.Member):
 
 @bot.command()
 async def meme(message):
-    await message.channel.send(file=discord.File("img\\"+random.choice(os.listdir("img"))))
+    await message.channel.send(file=discord.File("img\\" + random.choice(os.listdir("img"))))
 
 
 bot.run(TOKEN)
