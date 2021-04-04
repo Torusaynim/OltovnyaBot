@@ -71,4 +71,21 @@ async def meme(message):
     await message.channel.send(file=discord.File("img\\" + random.choice(os.listdir("img"))))
 
 
+@bot.command()
+async def PM(ctx, *, message=None):
+    channel = bot.get_channel(827903072667041802)
+    await channel.send("User "+str(ctx.author.id)+" said: "+message)
+
+
+@bot.command()
+async def clear(ctx, number):
+    await ctx.channel.purge(limit=int(number))
+
+
+@bot.command()
+async def addrole(ctx, user: discord.Member, role: discord.Role):
+    await user.add_roles(role)
+    await ctx.send(f"{user.name} got a role called: {role.name} by {ctx.author.name}")
+
+
 bot.run(TOKEN)
