@@ -43,7 +43,7 @@ async def hello(ctx):
 async def on_message_delete(message):
     channel = bot.get_channel(827903072667041802)
     await channel.send("Deleted message: " + message.content + "\nAuthor: " + str(message.author))
-    # добавить время удаленного сообщения
+    # добавить время удаленного сообщения (а еще кто удалил)
 
 
 @bot.event
