@@ -3,6 +3,7 @@
 
 # virtualenv
 venv/
+env/
 
 # dotenv
 .env
