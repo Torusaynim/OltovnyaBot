@@ -15,6 +15,8 @@ bot = commands.Bot(command_prefix='>')
 # Перенести в будущем в отдельный файл по возможности
 bad_words = ['дурак', 'идиот', 'лох']
 
+stats = {}
+
 
 @bot.event
 async def on_ready():
@@ -53,16 +55,25 @@ async def on_message_delete(message):
         embed.set_image(url=attachments[0].url)
 
     embed.add_field(name="Author: ", value=str(message.author), inline=False)
+    embed.add_field(name="Channel: ", value=str(message.channel), inline=False)
+    embed.add_field(name="Time: ", value=str(message.created_at) + ", UMT", inline=False)
     await channel.send(embed=embed)
-    # добавить время удаленного сообщения (а еще кто удалил)
+    # исправить время удаленного сообщения (добавить автора удаления сообщения)
 
 
 @bot.event
 async def on_message(message):
+    flag = True
     for word in message.content.lower().split():
         for restricted in bad_words:
             if word == restricted:
                 await message.delete()
+                flag = False
+    if flag is True:
+        if stats.get(str(message.author)):
+            stats[str(message.author)] = stats[str(message.author)] + 1
+        else:
+            stats[str(message.author)] = 1
     await bot.process_commands(message)
 
 
@@ -77,9 +88,13 @@ async def meme(message):
 
 
 @bot.command()
-async def PM(ctx, *, message=None):
+async def PM(ctx, *, message=""):
     channel = bot.get_channel(827903072667041802)
-    await channel.send("User "+str(ctx.author.id)+" said: "+message)
+    embed = discord.Embed(description='', colour=0xD5A6BD)
+    embed.add_field(name="Anon message", value="User " + str(ctx.author.id) + ": " + message, inline=False)
+    if ctx.message.attachments:
+        embed.set_image(url=ctx.message.attachments[0].url)
+    await channel.send(embed=embed)
 
 
 @bot.command()
@@ -91,6 +106,14 @@ async def clear(ctx, number):
 async def addrole(ctx, user: discord.Member, role: discord.Role):
     await user.add_roles(role)
     await ctx.send(f"{user.name} got a role called: {role.name} by {ctx.author.name}")
+
+
+@bot.command()
+async def stat(ctx):
+    embed = discord.Embed(description='', colour=0xD5A6BD)
+    for key, value in stats.items():
+        embed.add_field(name=key + ": ", value=str(value) + " messages", inline=False)
+    await ctx.send(embed=embed)
 
 
 bot.run(TOKEN)
