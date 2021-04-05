@@ -4,13 +4,14 @@ import random
 from discord.ext import commands
 from dotenv import load_dotenv
 
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 
-bot = commands.Bot(command_prefix='>')
+bot = commands.Bot(command_prefix='>', intents=intents)
 
 # Перенести в будущем в отдельный файл по возможности
 bad_words = ['дурак', 'идиот', 'лох']
@@ -78,6 +79,7 @@ async def on_message(message):
 
 
 @bot.command()
+@commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member):
     await ctx.guild.kick(user)
 
@@ -98,11 +100,13 @@ async def PM(ctx, *, message=""):
 
 
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def clear(ctx, number):
     await ctx.channel.purge(limit=int(number))
 
 
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def addrole(ctx, user: discord.Member, role: discord.Role):
     await user.add_roles(role)
     await ctx.send(f"{user.name} got a role called: {role.name} by {ctx.author.name}")
@@ -115,5 +119,30 @@ async def stat(ctx):
         embed.add_field(name=key + ": ", value=str(value) + " messages", inline=False)
     await ctx.send(embed=embed)
 
+
+@bot.command()
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    await channel.connect()
+
+
+@bot.command()
+async def allmute(ctx):
+    vc = ctx.author.voice.channel
+    for member in vc.members:
+        await member.edit(mute=True)
+
+
+@bot.command()
+async def allunmute(ctx):
+    vc = ctx.author.voice.channel
+    for member in vc.members:
+        await member.edit(mute=False)
+
+
+@bot.command()
+async def mute(ctx, user: discord.Member):
+    vc = ctx.author.voice.channel
+    await user.edit(mute=True)
 
 bot.run(TOKEN)
