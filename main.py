@@ -12,6 +12,9 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='>')
 
+# Перенести в будущем в отдельный файл по возможности
+bad_words = ['дурак', 'идиот', 'лох']
+
 
 @bot.event
 async def on_ready():
@@ -56,8 +59,10 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_message(message):
-    if message.content == 'vitali4':  # сделать через список
-        await message.delete()
+    for word in message.content.lower().split():
+        for restricted in bad_words:
+            if word == restricted:
+                await message.delete()
     await bot.process_commands(message)
 
 
