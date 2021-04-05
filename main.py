@@ -47,7 +47,7 @@ async def hello(ctx):
 
 @bot.event
 async def on_message_delete(message):
-    channel = bot.get_channel(827903072667041802)
+    channel = bot.get_channel(430432809371435008)
     embed = discord.Embed(description='', colour=0xD5A6BD)
     attachments = message.attachments
     if message.content:
@@ -91,7 +91,7 @@ async def meme(message):
 
 @bot.command()
 async def PM(ctx, *, message=""):
-    channel = bot.get_channel(827903072667041802)
+    channel = bot.get_channel(669481745435066398)
     embed = discord.Embed(description='', colour=0xD5A6BD)
     embed.add_field(name="Anon message", value="User " + str(ctx.author.id) + ": " + message, inline=False)
     if ctx.message.attachments:
