@@ -7,3 +7,9 @@ env/
 
 # dotenv
 .env
+
+# sphinx
+build/
+source/
+make.bat
+Makefile

@@ -1,16 +1,25 @@
 # .OltovnyaBot
-Тема, описание: Дискорд-бот
+Description: Discord-bot
 
-Бот для облегчения модерации и других развлекательных функций
+Setup guide:
 
-Требования:
-- Как модератор, хочу быстро и удобно очищать чат, чтобы следить за порядком
-- Как модератор, хочу быстро банить участников, чтобы следить за порядком
-- Как модератор, хочу автоматически выдавать роли, чтобы упросить себе жизнь
-- Как модератор, хочу автоматическую фильтрацию чата, чтобы не отвлекаться на мелочи
-- Как пользователь, хочу получать смешные картинки, чтобы было весело
-- Как пользователь, хочу видеть статистику активности, чтобы хвататься перед друзьями
-- Как пользователь, хочу иметь возможность писать анонимно, чтобы не бояться последствий своих слов
-- Как пользователь, хочу получать некоторые сообщения в ЛС, чтобы не засорять чат
+1. download the code and unpack it
 
-Пользователь вводит команду с помощью префикса и бот, если такая команда существует, соответствующе реагирует на нее, иначе говорит об ошибке и предлагает вывести полный список команд
+2. install all packages using `pip install -r requirements.txt`
+
+3. rename **.env.example** to **.env** and paste your bot token in it (create bot and copy it's token at Discord Developer Portal)
+
+4. Have a good time!
+
+# List of commands:
+- >PM        Sends message from Bot's perspective
+- >allmute   Mute all participants of the voice chat
+- >allunmute Unmute all participants of the voice chat
+- >hello     Say Hello! to the Bot
+- >help      Shows this message
+- >join      Make bot join voice channel you are sitting in
+- >meme      Replies with a random picture from the folder
+- >mute      Disable someone's ability to use voice chat
+- >roll      Simulate dice throw
+- >stat      Reply with written messages stat
+
