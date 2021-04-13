@@ -12,14 +12,14 @@ Setup guide:
 4. Have a good time!
 
 # List of commands:
-- >PM        Sends message from Bot's perspective
-- >allmute   Mute all participants of the voice chat
-- >allunmute Unmute all participants of the voice chat
-- >hello     Say Hello! to the Bot
-- >help      Shows this message
-- >join      Make bot join voice channel you are sitting in
-- >meme      Replies with a random picture from the folder
-- >mute      Disable someone's ability to use voice chat
-- >roll      Simulate dice throw
-- >stat      Reply with written messages stat
+- PM        Sends message from Bot's perspective
+- allmute   Mute all participants of the voice chat
+- allunmute Unmute all participants of the voice chat
+- hello     Say Hello! to the Bot
+- help      Shows this message
+- join      Make bot join voice channel you are sitting in
+- meme      Replies with a random picture from the folder
+- mute      Disable someone's ability to use voice chat
+- roll      Simulate dice throw
+- stat      Reply with written messages stat
 
