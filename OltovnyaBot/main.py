@@ -21,6 +21,9 @@ stats = {}
 
 @bot.event
 async def on_ready():
+    """
+    Function that shows in terminal when bot is online
+    """
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -29,26 +32,24 @@ async def on_ready():
 
 @bot.command()
 async def hello(ctx):
-    """
-    Greet your faithful bot
+    """Testing command
 
-    Args:
-        ctx: context command was used in
+    Greet your faithful bot and he will greet you as well
+
+    :param ctx: information about sent message
     """
     await ctx.send('Hello!')
 
 
 @bot.command()
 async def roll(ctx, dice: str):
-    """
-    Simulate dice throw
+    """Simulate a dice throw
 
-    Args:
-        ctx: context command was used in
-        dice: string in NdN format
+    In addition to command must be added number and size of dices in NdM format,
+    where N is number of dices and M is the size of dice
 
-    Returns:
-        on exception throw
+    :param ctx: information about sent message
+    :param dice: number and size of dices in NdM format
     """
     try:
         rolls, limit = map(int, dice.split('d'))
@@ -60,82 +61,82 @@ async def roll(ctx, dice: str):
 
 
 @bot.event
-async def on_message_delete(message):
-    """
-    Deleted messages processing
+async def on_message_delete(ctx):
+    """Deleted messages processing
 
-    Args:
-        message: deleted message context
+    Called every time someone deletes message
+
+    :param ctx: information about sent message
     """
     channel = bot.get_channel(430432809371435008)
     embed = discord.Embed(description='', colour=0xD5A6BD)
-    attachments = message.attachments
-    if message.content:
-        embed.add_field(name="Deleted message: ", value=message.content, inline=False)
+    attachments = ctx.attachments
+    if ctx.content:
+        embed.add_field(name="Deleted message: ", value=ctx.content, inline=False)
     if attachments:
         embed.set_image(url=attachments[0].url)
 
-    embed.add_field(name="Author: ", value=str(message.author), inline=False)
-    embed.add_field(name="Channel: ", value=str(message.channel), inline=False)
-    embed.add_field(name="Time: ", value=str(message.created_at) + ", UMT", inline=False)
+    embed.add_field(name="Author: ", value=str(ctx.author), inline=False)
+    embed.add_field(name="Channel: ", value=str(ctx.channel), inline=False)
+    embed.add_field(name="Time: ", value=str(ctx.created_at) + ", UMT", inline=False)
     await channel.send(embed=embed)
     # исправить время удаленного сообщения (добавить автора удаления сообщения)
 
 
 @bot.event
-async def on_message(message):
-    """
-    Sent messages processing
+async def on_message(ctx):
+    """Sent messages processing
 
-    Args:
-        message: sent message context
+    Called every time user sends message
+
+    :param ctx: information about sent message
     """
     flag = True
-    for word in message.content.lower().split():
+    for word in ctx.content.lower().split():
         for restricted in bad_words:
             if word == restricted:
-                await message.delete()
+                await ctx.delete()
                 flag = False
     if flag is True:
-        if stats.get(str(message.author)):
-            stats[str(message.author)] = stats[str(message.author)] + 1
+        if stats.get(str(ctx.author)):
+            stats[str(ctx.author)] = stats[str(ctx.author)] + 1
         else:
-            stats[str(message.author)] = 1
-    await bot.process_commands(message)
+            stats[str(ctx.author)] = 1
+    await bot.process_commands(ctx)
 
 
 @bot.command()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member):
-    """
-    Kick user from the server
+    """Kick user from the server
 
-    Args:
-        ctx: text channel context command was used in
-        user: user mention(@ping)
+    In addition to command must be added mention of a user(@UserName#0000)
+
+    :param ctx: information about sent message
+    :param user: user mention (@UserName#0000)
     """
     await ctx.guild.kick(user)
 
 
 @bot.command()
 async def meme(ctx):
-    """
-    Replies with a random picture from the folder
+    """Send a random image
 
-    Args:
-        ctx: context command was used in
+    Images are chosen from the img folder by random
+
+    :param ctx: information about sent message
     """
     await ctx.channel.send(file=discord.File("img\\" + random.choice(os.listdir("img"))))
 
 
 @bot.command()
 async def anon(ctx, *, message=""):
-    """
-    Sends anon message from bot's perspective
+    """Send anon message
 
-    Args:
-        ctx: context command was used in
-        message: message text
+    Message will be sent from the bot's perspective keeping the text and all the attachments to the message
+
+    :param ctx: information about sent message
+    :param message: message text
     """
     channel = bot.get_channel(669481745435066398)
     embed = discord.Embed(description='', colour=0xD5A6BD)
@@ -148,12 +149,12 @@ async def anon(ctx, *, message=""):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def clear(ctx, number):
-    """
-    Erase last N messages
+    """Delete last N messages
 
-    Args:
-        ctx: context command was used in
-        number: number of messages to be erased
+    In addition to the command must be added number of the messages to be deleted
+
+    :param ctx: information about sent message
+    :param number: number of messages (int)
     """
     await ctx.channel.purge(limit=int(number))
 
@@ -161,13 +162,14 @@ async def clear(ctx, number):
 @bot.command()
 @commands.has_permissions(administrator=True)
 async def addrole(ctx, user: discord.Member, role: discord.Role):
-    """
-    Give specific user specific role
+    """Give user specific role
 
-    Args:
-        ctx: context command was used in
-        user: user mention(@ping)
-        role: role mention(@ping)
+    In addition to the command must be added user mention and the role mention,
+    After success bot sends corresponding message
+
+    :param ctx: information about sent message
+    :param user: user mention (@UserName#0000)
+    :param role: role mention (@RoleName)
     """
     await user.add_roles(role)
     await ctx.send(f"{user.name} got a role called: {role.name} by {ctx.author.name}")
@@ -175,11 +177,12 @@ async def addrole(ctx, user: discord.Member, role: discord.Role):
 
 @bot.command()
 async def stat(ctx):
-    """
-    Reply with sent messages stat
+    """Text messages statistics
 
-    Args:
-        ctx: context command was used in
+    Bot counts every sent message when the bot is online using on_message(ctx) function,
+    this command outputs current statistics in embed window
+
+    :param ctx: information about sent message
     """
     embed = discord.Embed(description='', colour=0xD5A6BD)
     for key, value in stats.items():
@@ -189,11 +192,11 @@ async def stat(ctx):
 
 @bot.command()
 async def join(ctx):
-    """
-    Make bot join VC
+    """Make bot join voice chat
 
-    Args:
-        ctx: context command was used in
+    Bot joins the current VC the caller of command sits in
+
+    :param ctx: information about sent message
     """
     channel = ctx.author.voice.channel
     await channel.connect()
@@ -201,11 +204,12 @@ async def join(ctx):
 
 @bot.command()
 async def allmute(ctx):
-    """
-    Mute all users of the voice chat
+    """Mute all users in the voice chat
 
-    Args:
-        ctx: context command was used in
+    Disables ability to speak in the voice chat for every user in the current voice chat
+    (it is not necessary for the bot to be in this voice channel)
+
+    :param ctx: information about sent message
     """
     vc = ctx.author.voice.channel
     for member in vc.members:
@@ -214,11 +218,12 @@ async def allmute(ctx):
 
 @bot.command()
 async def allunmute(ctx):
-    """
-    Unmute all users of the voice chat
+    """Unmute all users in the voice chat
 
-    Args:
-        ctx: context command was used in
+    Returns ability to speak in the voice chat for every user in the current voice chat
+    (it is not necessary for the bot to be in this voice channel)
+
+    :param ctx: information about sent message
     """
     vc = ctx.author.voice.channel
     for member in vc.members:
@@ -227,12 +232,12 @@ async def allunmute(ctx):
 
 @bot.command()
 async def mute(ctx, user: discord.Member):
-    """
-    Disable users's ability to speak in VC
+    """Mute the specific user
 
-    Args:
-        ctx: context command was used in
-        user: user mention(@ping)
+    In addition to the command must be added mention of the user to disable their ability to speak in the voice chat
+
+    :param ctx: information about sent message
+    :param user: user mention (@UserName#0000)
     """
     vc = ctx.author.voice.channel
     await user.edit(mute=True)
