@@ -1,7 +1,7 @@
 FROM python:3
 
-ADD OltovnyaBot/main.py ./main.py
-ADD OltovnyaBot/.env ./.env
+ADD main.py ./main.py
+ADD .env ./.env
 COPY requirements.txt ./requirements.txt
 
 RUN pip install -r requirements.txt
