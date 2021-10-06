@@ -3,6 +3,8 @@ import discord
 import random
 from discord.ext import commands
 from dotenv import load_dotenv
+from discord.utils import get
+import datetime
 
 
 load_dotenv()
@@ -76,9 +78,12 @@ async def on_message_delete(ctx):
     if attachments:
         embed.set_image(url=attachments[0].url)
 
+    timeunix = (ctx.created_at - datetime.datetime(1970, 1, 1)).total_seconds()
+    value = datetime.datetime.fromtimestamp(timeunix)
+
     embed.add_field(name="Author: ", value=str(ctx.author), inline=False)
     embed.add_field(name="Channel: ", value=str(ctx.channel), inline=False)
-    embed.add_field(name="Time: ", value=str(ctx.created_at) + ", UMT", inline=False)
+    embed.add_field(name="Time: ", value=value.strftime('%d.%m.%Y %H:%M:%S'), inline=False)
     await channel.send(embed=embed)
     # исправить время удаленного сообщения (добавить автора удаления сообщения)
 
@@ -92,6 +97,7 @@ async def on_message(ctx):
     :param ctx: information about sent message
     """
     flag = True
+    # await ctx.add_reaction("👍")
     for word in ctx.content.lower().split():
         for restricted in bad_words:
             if word == restricted:
