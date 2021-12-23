@@ -85,7 +85,7 @@ async def on_message_delete(ctx):
     embed.add_field(name="Channel: ", value=str(ctx.channel), inline=False)
     embed.add_field(name="Time: ", value=value.strftime('%d.%m.%Y %H:%M:%S'), inline=False)
     await channel.send(embed=embed)
-    # исправить время удаленного сообщения (добавить автора удаления сообщения)
+    # добавить автора удаления сообщения
 
 
 @bot.event
@@ -146,7 +146,7 @@ async def anon(ctx, *, message=""):
     """
     channel = bot.get_channel(669481745435066398)
     embed = discord.Embed(description='', colour=0xD5A6BD)
-    embed.add_field(name="Anon message", value="User " + str(ctx.author.id) + ": " + message, inline=False)
+    embed.add_field(name="Anon message", value= message, inline=False)
     if ctx.message.attachments:
         embed.set_image(url=ctx.message.attachments[0].url)
     await channel.send(embed=embed)
@@ -247,5 +247,23 @@ async def mute(ctx, user: discord.Member):
     """
     vc = ctx.author.voice.channel
     await user.edit(mute=True)
+
+@bot.command()
+async def suggest(ctx, *, message=""):
+    """Suggest a poll
+
+    Suggest a poll
+
+    :param ctx: information about sent message
+    :param message: message text
+    """
+    channel = bot.get_channel(543453305058361354)
+    embed = discord.Embed(description='', colour=0xD5A6BD)
+    embed.add_field(name="Suggestion", value="Author: ```"+str(ctx.author)+"``` suggests: \n\n" + message, inline=False)
+    if ctx.message.attachments:
+        embed.set_image(url=ctx.message.attachments[0].url)
+    temp = await channel.send(embed=embed)
+    await temp.add_reaction("👍")
+    await temp.add_reaction("👎")
 
 bot.run(TOKEN)
