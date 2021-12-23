@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from discord.utils import get
 import datetime
 
-
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -88,6 +87,7 @@ async def on_message_delete(ctx):
     # добавить автора удаления сообщения
 
 
+
 @bot.event
 async def on_message(ctx):
     """Sent messages processing
@@ -135,6 +135,7 @@ async def meme(ctx):
     await ctx.channel.send(file=discord.File("img\\" + random.choice(os.listdir("img"))))
 
 
+
 @bot.command()
 async def anon(ctx, *, message=""):
     """Send anon message
@@ -145,11 +146,13 @@ async def anon(ctx, *, message=""):
     :param message: message text
     """
     channel = bot.get_channel(669481745435066398)
-    embed = discord.Embed(description='', colour=0xD5A6BD)
-    embed.add_field(name="Anon message", value= message, inline=False)
+    if message != "":
+        await channel.send(message)
     if ctx.message.attachments:
-        embed.set_image(url=ctx.message.attachments[0].url)
-    await channel.send(embed=embed)
+        for pic in ctx.message.attachments:
+            embed = discord.Embed(description='', colour=0xD5A6BD)
+            embed.set_image(url=pic.url)
+            await channel.send(embed=embed)
 
 
 @bot.command()
@@ -248,6 +251,7 @@ async def mute(ctx, user: discord.Member):
     vc = ctx.author.voice.channel
     await user.edit(mute=True)
 
+
 @bot.command()
 async def suggest(ctx, *, message=""):
     """Suggest a poll
@@ -259,7 +263,7 @@ async def suggest(ctx, *, message=""):
     """
     channel = bot.get_channel(543453305058361354)
     embed = discord.Embed(description='', colour=0xD5A6BD)
-    embed.add_field(name="Suggestion", value="Author: ```"+str(ctx.author)+"``` suggests: \n\n" + message, inline=False)
+    embed.add_field(name="Suggestion", value="Author: ```" + str(ctx.author) + "``` suggests: \n\n" + message, inline=False)
     if ctx.message.attachments:
         embed.set_image(url=ctx.message.attachments[0].url)
     temp = await channel.send(embed=embed)
