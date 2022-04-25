@@ -87,6 +87,7 @@ async def on_message_delete(ctx):
     # добавить автора удаления сообщения
 
 
+
 @bot.event
 async def on_message(ctx):
     """Sent messages processing
@@ -211,13 +212,15 @@ async def join(ctx):
 
 @bot.command()
 async def leave(ctx):
-    """Make bot join voice chat
+    """Make bot leave voice chat
 
-    Bot joins the current VC the caller of command sits in
+    Bot leaves the current VC
 
     :param ctx: information about sent message
     """
-    await ctx.guild.voice_client.disconnect(force=True)
+    channel = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+    if channel.is_connected():
+        await channel.disconnect()
 
 @bot.command()
 async def allmute(ctx):
